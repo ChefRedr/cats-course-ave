@@ -34,7 +34,30 @@ function App() {
 
       const result = await model.generateContent(prompt);
       const responseText = result.response.text();
-      setMessages([...messages, { text: input, sender: 'user' }, { text: responseText, sender: 'bot' }]);
+
+      // Extract course recommendations and justifications
+      const courseRegex = /([A-Z_]+\s*\d+[^:]*?)(\n{2,}(.*?))(?=\n|$)/g;
+      let match;
+      const courses = [];
+
+      while ((match = courseRegex.exec(responseText)) !== null) {
+        const courseName = match[1].trim();
+        const justification = match[3].trim();
+
+        courses.push({
+          courseName: courseName.trim(),
+          justification: justification.trim()
+        });
+      }
+
+      if (courses.length === 0) {
+        console.error("Failed to parse courses from responseText:", responseText);
+      }
+
+      // Format the extracted courses into JSON
+      const formattedResponse = JSON.stringify({ courses }, null, 2);
+
+      setMessages([...messages, { text: input, sender: 'user' }, { text: formattedResponse, sender: 'bot' }]);
     // } catch (error) {
     //   console.error("Error generating content:", error);
     //   setMessages([...messages, { text: input, sender: 'user' }, { text: "Error generating response. Please try again." + error, sender: 'bot' }]);
