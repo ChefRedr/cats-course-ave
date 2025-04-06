@@ -1,0 +1,8 @@
+Functionality of App
+
+Sign in Feature in the top corner,
+Drop down - asks for school, major, and free response that asks for major interests
+    LLM checks if free response is inappropriate
+Asks for previous schedule
+Generates course tree with classes they've taken in green, and ones they haven't taken in red
+Generates pseduo schedule
